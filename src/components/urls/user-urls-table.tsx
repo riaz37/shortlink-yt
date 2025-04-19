@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from 'react';
 import { Copy, Edit, ExternalLink, QrCode, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -33,8 +34,13 @@ export function UserUrlsTable({ urls }: UserUrlsTableProps) {
     shortCode: string;
   } | null>(null);
 
+  const getBaseUrl = useCallback(() => {
+    return process.env.NEXT_PUBLIC_APP_URL || 
+      (typeof window !== 'undefined' ? window.location.origin : '');
+  }, []);
+
   const copyToClipboard = async (shortCode: string) => {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    const baseUrl = getBaseUrl();
     const shortUrl = `${baseUrl}/r/${shortCode}`;
 
     try {
@@ -73,7 +79,7 @@ export function UserUrlsTable({ urls }: UserUrlsTableProps) {
   };
 
   const showQrCode = (shortCode: string) => {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    const baseUrl = getBaseUrl();
     const shortUrl = `${baseUrl}/r/${shortCode}`;
     setQrCodeUrl(shortUrl);
     setQrCodeShortCode(shortCode);
@@ -122,8 +128,7 @@ export function UserUrlsTable({ urls }: UserUrlsTableProps) {
           </thead>
           <tbody>
             {localUrls.map((url) => {
-              const baseUrl =
-                process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+              const baseUrl = getBaseUrl();
               const shortUrl = `${baseUrl}/r/${url.shortCode}`;
 
               return (

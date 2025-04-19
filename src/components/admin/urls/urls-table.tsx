@@ -45,7 +45,7 @@ import {
   User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { toast } from "sonner";
 
 interface UrlsTableProps {
@@ -71,25 +71,10 @@ export function UrlsTable({
   const [copyingId, setCopyingId] = useState<number | null>(null);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
 
-  // Get the current path from window location or default to /admin/urls
-  const basePath =
-    typeof window !== "undefined" ? window.location.pathname : "/admin/urls";
-
-  // Extract any additional query parameters that should be preserved
-  const preserveParams = () => {
-    if (typeof window === "undefined") return "";
-
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-    let paramString = "";
-
-    // Preserve filter parameter if it exists
-    if (params.has("filter")) {
-      paramString += `&filter=${params.get("filter")}`;
-    }
-
-    return paramString;
-  };
+  const getBaseUrl = useCallback(() => {
+    return process.env.NEXT_PUBLIC_APP_URL || 
+      (typeof window !== 'undefined' ? window.location.origin : '');
+  }, []);
 
   const limit = 10;
   const totalPage = Math.ceil(total / limit);
@@ -279,7 +264,7 @@ export function UrlsTable({
   const copyToClipboard = async (id: number, shortCode: string) => {
     try {
       setCopyingId(id);
-      const shortUrl = `${window.location.origin}/r/${shortCode}`;
+      const shortUrl = `${getBaseUrl()}/r/${shortCode}`;
       await navigator.clipboard.writeText(shortUrl);
       toast.success("Short URL copied to clipboard.");
     } catch (error) {

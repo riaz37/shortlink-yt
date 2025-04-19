@@ -1,7 +1,7 @@
 "use server";
 
 import { ApiResponse } from "@/lib/types";
-import { ensureHttps, isValidUrl } from "@/lib/utils";
+import { ensureHttps, isValidUrl, getBaseUrl } from "@/lib/utils";
 import { custom, z } from "zod";
 import { nanoid } from "nanoid";
 import { db } from "@/server/db";
@@ -102,7 +102,7 @@ export async function shortenUrl(formData: FormData): Promise<
       flagReason,
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = getBaseUrl();
     const shortUrl = `${baseUrl}/r/${shortCode}`;
 
     revalidatePath("/");
