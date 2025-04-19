@@ -71,6 +71,9 @@ export function UrlsTable({
   const [copyingId, setCopyingId] = useState<number | null>(null);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
 
+  // Add this line to define basePath
+  const basePath = typeof window !== "undefined" ? window.location.pathname : "/admin/urls";
+
   const getBaseUrl = useCallback(() => {
     return process.env.NEXT_PUBLIC_APP_URL || 
       (typeof window !== 'undefined' ? window.location.origin : '');
