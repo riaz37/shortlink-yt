@@ -74,6 +74,22 @@ export function UrlsTable({
   // Add this line to define basePath
   const basePath = typeof window !== "undefined" ? window.location.pathname : "/admin/urls";
 
+  // Add the preserveParams function
+  const preserveParams = () => {
+    if (typeof window === "undefined") return "";
+
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    let paramString = "";
+
+    // Preserve the filter parameter if it exists
+    if (params.has("filter")) {
+      paramString += `&filter=${params.get("filter")}`;
+    }
+
+    return paramString;
+  };
+
   const getBaseUrl = useCallback(() => {
     return process.env.NEXT_PUBLIC_APP_URL || 
       (typeof window !== 'undefined' ? window.location.origin : '');
