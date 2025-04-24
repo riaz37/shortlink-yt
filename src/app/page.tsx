@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <div className="relative isolate">
+      <div className="relative isolate z-0">
         {/* Background gradient */}
         <div
           aria-hidden="true"

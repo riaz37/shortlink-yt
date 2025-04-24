@@ -26,7 +26,7 @@ export function Header() {
   const isAuthenticated = status === "authenticated";
 
   return (
-    <header className="border-b">
+    <header className="border-b relative z-50">
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link href={"/"} className="text-xl font-bold">
           ShortLink
