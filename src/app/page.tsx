@@ -1,9 +1,17 @@
+import { Suspense } from "react";
 import { UrlShortenerForm } from "@/components/urls/url-shortener-form";
+import { StatsDisplay } from "@/components/stats/stats-display";
+import { getStats } from "@/lib/stats";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Link2, ShieldCheck, BarChart } from "lucide-react";
+import { ArrowRight, Link2, ShieldCheck, BarChart, Heart, Zap, Globe, LineChart, Settings, Shield } from "lucide-react";
 import Link from "next/link";
+import { db } from "@/server/db";
+import { urls, users } from "@/server/db/schema";
+import { count, sql } from "drizzle-orm";
 
-export default function Home() {
+export default async function Home() {
+  const stats = await getStats();
+
   return (
     <>
       {/* Hero Section */}
@@ -72,6 +80,72 @@ export default function Home() {
               <UrlShortenerForm />
             </div>
 
+            {/* New: How It Works Section */}
+            <section className="py-16 bg-muted/30">
+              <div className="container max-w-6xl mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <Zap className="size-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">1. Paste Your URL</h3>
+                    <p className="text-muted-foreground">Enter your long URL and optionally customize your short link</p>
+                  </div>
+                  <div className="flex flex-col items-center text-center">
+                    <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <Shield className="size-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">2. AI Safety Check</h3>
+                    <p className="text-muted-foreground">Our AI automatically verifies the safety of your URL</p>
+                  </div>
+                  <div className="flex flex-col items-center text-center">
+                    <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <LineChart className="size-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">3. Track & Analyze</h3>
+                    <p className="text-muted-foreground">Monitor your link's performance with detailed analytics</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* New: Features Section */}
+            <section className="py-16">
+              <div className="container max-w-6xl mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12">Powerful Features</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="flex gap-4 p-6 rounded-lg border bg-card">
+                    <div className="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Globe className="size-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">Custom Domains</h3>
+                      <p className="text-muted-foreground">Use your own domain for branded short links that reinforce your identity</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 p-6 rounded-lg border bg-card">
+                    <div className="size-12 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Settings className="size-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">Advanced Controls</h3>
+                      <p className="text-muted-foreground">Set expiration dates, password protection, and geographic restrictions</p>
+                    </div>
+                  </div>
+                  {/* Add more feature cards as needed */}
+                </div>
+              </div>
+            </section>
+
+            {/* Optimized Stats Section */}
+            <section className="py-16 bg-muted/30">
+              <div className="container max-w-6xl mx-auto px-4">
+                <h2 className="text-3xl font-bold text-center mb-12">Our Impact</h2>
+                <StatsDisplay stats={stats} />
+              </div>
+            </section>
+
             {/* CTA Section */}
             <div className="mt-8">
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -109,21 +183,22 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Trust Indicators Section */}
-      <div className="border-t">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold mb-8">Trusted by developers and marketers</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-50">
-              {/* Replace these with actual company logos */}
-              <div className="h-8 w-32 bg-foreground/20 rounded" />
-              <div className="h-8 w-32 bg-foreground/20 rounded" />
-              <div className="h-8 w-32 bg-foreground/20 rounded" />
-              <div className="h-8 w-32 bg-foreground/20 rounded" />
-            </div>
+      {/* New: Made with Love Section */}
+      <section className="py-8 border-t">
+        <div className="container max-w-6xl mx-auto px-4">
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            Made with <Heart className="size-4 text-red-500 fill-red-500" /> by
+            <a 
+              href="https://github.com/riazXrazor" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="font-medium hover:text-primary transition-colors"
+            >
+              Riaz
+            </a>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 }
